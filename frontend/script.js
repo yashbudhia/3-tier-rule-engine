@@ -1,22 +1,31 @@
+const baseUrl = 'http://localhost:5000'; // Define the base URL for your API
+
 document.getElementById('rule-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const ruleInput = document.getElementById('rule-input').value;
-    const response = await fetch('/create_rule', {
+    const response = await fetch(`${baseUrl}/create_rule`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ rule_string: ruleInput })
     });
+
+    // Log the response for debugging
     const result = await response.json();
-    document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}`;
+    if (!response.ok) {
+        console.error('Error response:', result); // Log the error response
+        document.getElementById('rule-message').innerText = `Error: ${result.error}`;
+    } else {
+        document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}`;
+    }
 });
 
 document.getElementById('combine-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const combineInput = document.getElementById('combine-input').value;
     const ruleIds = combineInput.split(',').map(id => id.trim());
-    const response = await fetch('/combine_rules', {
+    const response = await fetch(`${baseUrl}/combine_rules`, { // Updated URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -32,7 +41,7 @@ document.getElementById('evaluate-form').addEventListener('submit', async (e) =>
     const ruleId = document.getElementById('evaluate-rule-id').value;
     const dataInput = document.getElementById('evaluate-data').value;
     const userData = JSON.parse(dataInput);
-    const response = await fetch('/evaluate_rule', {
+    const response = await fetch(`${baseUrl}/evaluate_rule`, { // Updated URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

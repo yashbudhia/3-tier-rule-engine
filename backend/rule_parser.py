@@ -1,18 +1,25 @@
 import re
 from .ast_node import Node
 
+# Define valid condition keys
+VALID_CONDITIONS = {'age', 'department', 'income', 'spend'}
+
 def parse_condition(condition):
     """Parse a condition string (e.g., 'age > 30')"""
     pattern = r"(\w+)\s*(>|>=|<|<=|=|!=)\s*(\d+|'[^']+')"
     match = re.match(pattern, condition)
     if match:
         key, operator, value = match.groups()
+        # Validate the key against the valid conditions
+        if key not in VALID_CONDITIONS:
+            raise ValueError(f"Invalid condition: {key}")
         return {key: f"{operator} {value.strip()}"}
-    raise ValueError(f"Invalid condition: {condition}")
+    raise ValueError(f"Invalid condition format: {condition}")
 
 def create_rule(rule_string):
     """Convert the rule string into an AST"""
-    tokens = re.findall(r"\w+|[><=!]=?|['\w]+|\(|\)|AND|OR", rule_string)
+    # Update token extraction to ensure whole conditions are captured
+    tokens = re.findall(r"\(?\s*\w+\s*(?:>|>=|<|<=|=|!=)\s*(?:\d+|'[^']+')\s*\)?|AND|OR", rule_string)
     stack = []
 
     def create_node():
@@ -32,8 +39,12 @@ def create_rule(rule_string):
                 stack.append(node)
             stack.pop()  # pop '('
         else:
-            condition = parse_condition(token)
-            stack.append(Node(node_type="operand", value=condition))
+            try:
+                # Parse the condition correctly
+                condition = parse_condition(token.strip())
+                stack.append(Node(node_type="operand", value=condition))
+            except ValueError as e:
+                raise ValueError(f"Failed to parse condition '{token}': {str(e)}")
     
     while len(stack) > 1:
         stack.append(create_node())

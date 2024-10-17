@@ -1,6 +1,14 @@
+import os
+from dotenv import load_dotenv
 from pymongo import MongoClient
+from datetime import datetime
 
-client = MongoClient("mongodb://localhost:27017/")
+# Load environment variables from .env file
+load_dotenv()
+
+# Get MongoDB URI from environment variables
+MONGO_URI = os.getenv('DATABASE_URI', 'mongodb://localhost:27017/')
+client = MongoClient(MONGO_URI)
 db = client['rule_engine']
 
 rules_collection = db['rules']
