@@ -34,6 +34,4 @@ rule-engine-app/
 ├── requirements.txt          # Python dependencies (Flask, pymongo, etc.)
 └── config.py                 # Configuration for API and database connection
 
-
-
 ```
