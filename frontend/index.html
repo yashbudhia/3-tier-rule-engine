@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Rule Engine</h1>
+
+    <!-- Form to create a rule -->
+    <h2>Create a Rule</h2>
+    <form id="rule-form">
+        <input type="text" id="rule-input" placeholder="Enter rule (e.g., age > 30 AND department = 'Sales')">
+        <button type="submit">Create Rule</button>
+    </form>
+    <p id="rule-message"></p>
+
+    <!-- Form to combine rules -->
+    <h2>Combine Rules</h2>
+    <form id="combine-form">
+        <input type="text" id="combine-input" placeholder="Enter rule IDs (e.g., rule1, rule2)">
+        <button type="submit">Combine Rules</button>
+    </form>
+    <p id="combine-message"></p>
+
+    <!-- Form to evaluate a rule -->
+    <h2>Evaluate Rule</h2>
+    <form id="evaluate-form">
+        <input type="text" id="evaluate-rule-id" placeholder="Enter rule ID (e.g., rule1)">
+        <input type="text" id="evaluate-data" placeholder="Enter data (e.g., {&quot;age&quot;:35, &quot;salary&quot;:60000})">
+        <button type="submit">Evaluate Rule</button>
+    </form>
+    <p id="evaluate-message"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
