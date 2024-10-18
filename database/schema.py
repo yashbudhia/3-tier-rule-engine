@@ -11,7 +11,7 @@ MONGO_URI = os.getenv('DATABASE_URI', 'mongodb://localhost:27017/')
 client = MongoClient(MONGO_URI)
 db = client['rule_engine']
 
-rules_collection = db['rules']
+rules_collection = db['rules']``
 
 def save_rule(rule_id, rule_string, ast):
     rule_data = {

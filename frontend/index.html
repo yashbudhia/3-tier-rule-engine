@@ -12,11 +12,12 @@
     <!-- Form to create a rule -->
     <h2>Create a Rule</h2>
     <form id="rule-form">
-        <input type="text" id="rule-input" placeholder="Enter rule (e.g., age > 30 AND department = 'Sales')">
+        <input type="text" id="rule-input" placeholder="Enter rule" required />
         <button type="submit">Create Rule</button>
     </form>
-    <p id="rule-message"></p>
-
+    <div id="rule-message"></div>
+    <div id="ast-representation"></div>  <!-- Display AST here -->
+    
     <!-- Form to combine rules -->
     <h2>Combine Rules</h2>
     <form id="combine-form">

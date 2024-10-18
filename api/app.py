@@ -18,11 +18,10 @@ def create_rule_endpoint():
         ast = create_rule(rule_string)
         rule_id = f"rule{len(rules) + 1}"
         rules[rule_id] = ast
-        return jsonify({"rule_id": rule_id, "ast": str(ast)})
+        return jsonify({"rule_id": rule_id, "ast": str(ast)})  # Return the AST representation
     except Exception as e:
         print(f"Error occurred: {str(e)}")  # Log the error to the console
         return jsonify({"error": str(e)}), 400
-
 
 @app.route("/combine_rules", methods=["POST"])
 def combine_rules_endpoint():
@@ -32,7 +31,7 @@ def combine_rules_endpoint():
         combined_rule = combine_rules(selected_rules)
         combined_rule_id = f"rule{len(rules) + 1}"
         rules[combined_rule_id] = combined_rule
-        return jsonify({"combined_rule_id": combined_rule_id, "ast": str(combined_rule)})
+        return jsonify({"combined_rule_id": combined_rule_id, "ast": str(combined_rule)})  # Return the combined rule's AST
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 

@@ -1,8 +1,10 @@
 const baseUrl = 'http://localhost:5000'; // Define the base URL for your API
 
+// Handle the creation of a rule
 document.getElementById('rule-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const ruleInput = document.getElementById('rule-input').value;
+
     const response = await fetch(`${baseUrl}/create_rule`, {
         method: 'POST',
         headers: {
@@ -11,43 +13,63 @@ document.getElementById('rule-form').addEventListener('submit', async (e) => {
         body: JSON.stringify({ rule_string: ruleInput })
     });
 
-    // Log the response for debugging
     const result = await response.json();
     if (!response.ok) {
-        console.error('Error response:', result); // Log the error response
-        document.getElementById('rule-message').innerText = `Error: ${result.error}`;
+        document.getElementById('rule-message').innerText = `Error: ${result.error || 'Unknown error'}`;
     } else {
-        document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}`;
+        document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}, AST: ${result.ast}`;
     }
 });
 
+// Handle combining of rules
 document.getElementById('combine-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const combineInput = document.getElementById('combine-input').value;
     const ruleIds = combineInput.split(',').map(id => id.trim());
-    const response = await fetch(`${baseUrl}/combine_rules`, { // Updated URL
+
+    const response = await fetch(`${baseUrl}/combine_rules`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ rule_ids: ruleIds })
     });
+
     const result = await response.json();
-    document.getElementById('combine-message').innerText = `Combined Rule created: ${result.combined_rule_id}`;
+    if (!response.ok) {
+        document.getElementById('combine-message').innerText = `Error: ${result.error || 'Unknown error'}`;
+    } else {
+        document.getElementById('combine-message').innerText = `Combined Rule created: ${result.combined_rule_id}, AST: ${result.ast}`;
+    }
 });
 
+// Handle evaluation of a rule
 document.getElementById('evaluate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const ruleId = document.getElementById('evaluate-rule-id').value;
     const dataInput = document.getElementById('evaluate-data').value;
-    const userData = JSON.parse(dataInput);
-    const response = await fetch(`${baseUrl}/evaluate_rule`, { // Updated URL
+
+    // Safely parse JSON user data
+    let userData;
+    try {
+        userData = JSON.parse(dataInput);
+    } catch (error) {
+        document.getElementById('evaluate-message').innerText = 'Error: Invalid JSON data';
+        return;
+    }
+
+    const response = await fetch(`${baseUrl}/evaluate_rule`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ rule_id: ruleId, user_data: userData })
     });
+
     const result = await response.json();
-    document.getElementById('evaluate-message').innerText = `Evaluation result: ${result.result}`;
+    if (!response.ok) {
+        document.getElementById('evaluate-message').innerText = `Error: ${result.error || 'Unknown error'}`;
+    } else {
+        document.getElementById('evaluate-message').innerText = `Evaluation result: ${result.result}`;
+    }
 });
