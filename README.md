@@ -35,3 +35,8 @@ rule-engine-app/
 └── config.py                 # Configuration for API and database connection
 
 ```
+
+
+# Error Handling
+
+- Added checks if same rule is added twice or more

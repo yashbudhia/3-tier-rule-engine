@@ -30,7 +30,7 @@ def create_rule(rule_string):
         if re.match(r"\w+\s*(?:>|>=|<|<=|=|!=)\s*(?:\d+|'[^']+'|\"[^\"]*\")", token):
             # If the token is a valid condition
             parsed_condition = parse_condition(token)
-            stack.append(Node(node_type="operand", value=parsed_condition))
+            stack.append(Node(type="operand", value=parsed_condition))  # Use 'type' instead of 'node_type'
             print(f"Added condition to stack: {parsed_condition}")
             print(f"Current stack after adding condition: {stack}")  # Debugging: print stack
         elif token in ["AND", "OR"]:
@@ -40,7 +40,7 @@ def create_rule(rule_string):
                     next_token = tokens[i + 1]
                     if re.match(r"\w+\s*(?:>|>=|<|<=|=|!=)\s*(?:\d+|'[^']+'|\"[^\"]*\")", next_token):
                         parsed_condition = parse_condition(next_token)
-                        stack.append(Node(node_type="operand", value=parsed_condition))
+                        stack.append(Node(type="operand", value=parsed_condition))  # Use 'type' instead of 'node_type'
                         print(f"Added condition to stack: {parsed_condition}")
                         print(f"Current stack after adding condition: {stack}")  # Debugging: print stack
                         i += 1  # Skip the next token
@@ -54,7 +54,7 @@ def create_rule(rule_string):
             left = stack.pop()   # Left operand
 
             # Create a new operator node
-            node = Node(node_type="operator", left=left, right=right, value=token)
+            node = Node(type="operator", left=left, right=right, value=token)  # Use 'type' instead of 'node_type'
             stack.append(node)  # Push the new node onto the stack
             print(f"Created node with operator '{token}' and added to stack: {node}")
             print(f"Current stack after creating node: {stack}")  # Debugging: print stack
