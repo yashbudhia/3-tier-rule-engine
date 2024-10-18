@@ -3,7 +3,7 @@ from flask_cors import CORS  # Import CORS
 from backend.rule_parser import create_rule
 from backend.rule_evaluator import evaluate_rule
 from backend.rule_combiner import combine_rules
-from database.schema import db,save_rule, load_rule  # Import save_rule and load_rule functions
+from database.schema import save_rule, load_rule  # Adjusted import statement
 from backend.ast_node import Node  # Import the Node class
 
 app = Flask(__name__)
@@ -25,23 +25,19 @@ def create_rule_endpoint():
         # Generate a unique rule ID
         rule_id = f"rule{len(rules) + 1}"
 
-        # Check if the rule already exists in MongoDB
-        existing_rule = db.rules.find_one({'_id': rule_id})  # Ensure you have db configured
-        if existing_rule:
-            return jsonify({"error": "Rule with this ID already exists."}), 400
-
         # Save the rule to MongoDB, serializing the Node to a dictionary
-        save_rule(rule_id, rule_string, ast.to_dict())
+        save_rule(rule_id, rule_string, ast.to_dict())  # Convert to dict before saving
 
         # Store the rule temporarily if needed
         rules[rule_id] = ast
 
         return jsonify({"rule_id": rule_id, "ast": ast.to_dict()})  # Return the AST representation as a dictionary
 
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400  # Handle duplicate key error
     except Exception as e:
         print(f"Error occurred: {str(e)}")  # Log the error to the console
         return jsonify({"error": str(e)}), 400
-
 
 # Combine Rules Endpoint
 @app.route("/combine_rules", methods=["POST"])
@@ -70,29 +66,29 @@ def combine_rules_endpoint():
         print(f"Error occurred: {str(e)}")  # Log the error to the console
         return jsonify({"error": str(e)}), 400
 
-
-
-
 # Evaluate Rule Endpoint
 @app.route("/evaluate_rule", methods=["POST"])
 def evaluate_rule_endpoint():
     try:
         rule_id = request.json.get("rule_id")
         user_data = request.json.get("user_data")
-        
-        # Load rule from MongoDB
-        rule = load_rule(rule_id)
-        
-        if not rule:
+
+        if not rule_id or not user_data:
+            return jsonify({"error": "Rule ID and user data are required"}), 400
+
+        # Retrieve the rule from the database using the rule_id
+        rule_data = load_rule(rule_id)  # Load rule directly from the database
+
+        if not rule_data:
             return jsonify({"error": "Rule not found"}), 404
-        
-        # Evaluate the rule's AST with the user data
-        result = evaluate_rule(rule['ast'], user_data)
-        
+
+        # Evaluate the rule using the stored AST
+        result = evaluate_rule(rule_data['ast'], user_data)  # No need to convert since it's already a Node
+
         return jsonify({"result": result})
     except Exception as e:
+        print(f"Error occurred: {str(e)}")  # Log the error to the console
         return jsonify({"error": str(e)}), 400
-
 
 if __name__ == "__main__":
     app.run(debug=True)

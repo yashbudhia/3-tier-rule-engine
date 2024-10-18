@@ -17,7 +17,8 @@ document.getElementById('rule-form').addEventListener('submit', async (e) => {
     if (!response.ok) {
         document.getElementById('rule-message').innerText = `Error: ${result.error || 'Unknown error'}`;
     } else {
-        document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}, AST: ${result.ast}`;
+        document.getElementById('rule-message').innerText = `Rule created: ${result.rule_id}`;
+        document.getElementById('ast-representation').innerText = `AST: ${JSON.stringify(result.ast, null, 2)}`; // Display the AST
     }
 });
 
@@ -39,7 +40,7 @@ document.getElementById('combine-form').addEventListener('submit', async (e) => 
     if (!response.ok) {
         document.getElementById('combine-message').innerText = `Error: ${result.error || 'Unknown error'}`;
     } else {
-        document.getElementById('combine-message').innerText = `Combined Rule created: ${result.combined_rule_id}, AST: ${result.ast}`;
+        document.getElementById('combine-message').innerText = `Combined Rule created: ${result.combined_rule_id}`;
     }
 });
 
@@ -65,6 +66,7 @@ document.getElementById('evaluate-form').addEventListener('submit', async (e) =>
         },
         body: JSON.stringify({ rule_id: ruleId, user_data: userData })
     });
+    
 
     const result = await response.json();
     if (!response.ok) {

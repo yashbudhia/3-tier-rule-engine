@@ -5,7 +5,6 @@ class Node:
         self.left = left
         self.right = right
 
-
     # Serialize the Node to a dictionary
     def to_dict(self):
         return {
@@ -20,7 +19,6 @@ class Node:
     def from_dict(data):
         if data is None:
             return None
-        # Ensure the dictionary keys match the Node constructor parameters
         return Node(
             type=data['type'],
             value=data['value'],
