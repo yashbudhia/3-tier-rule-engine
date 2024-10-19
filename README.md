@@ -152,3 +152,71 @@ json
 python -m unittest tests/test_rule_engine.py
 
 ```
+
+# Sample Acceptable Rules:
+
+1. rule1:
+    This rule checks if the user is either in Sales and over 30 or in Marketing and under 25, with additional conditions on salary or experience.
+
+    plaintext
+```
+((age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing')) AND (salary > 50000 OR experience > 5)
+```
+2. rule2:
+This rule applies to users in the Marketing department who are over 30, with conditions on salary or experience.
+
+plaintext
+```
+(age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5)
+```
+
+3. rule3:
+This rule checks if the user is younger than 40 or works in the HR department, with additional conditions on salary.
+
+plaintext
+```
+(age < 40 OR department = 'HR') AND salary > 30000
+```
+
+4. rule4:
+This rule checks if the user’s experience is greater than 10 years or their income is less than 60000.
+
+plaintext
+```
+(experience > 10 OR income < 60000)
+```
+
+5. rule5:
+This rule applies to users in the IT department with more than 3 years of experience or a minimum spend of 5000.
+
+plaintext
+```
+(department = 'IT' AND experience > 3) OR spend >= 5000
+```
+
+6. rule6:
+This rule checks if the user is either in the Operations department or has a salary higher than 80000.
+
+plaintext
+```
+(department = 'Operations' OR salary > 80000)
+```
+
+You can instruct users to enter these rules through the frontend's rule input field, and these samples demonstrate the flexibility of combining conditions using AND, OR, and comparison operators (>, <, >=, <=, etc.).
+
+- Evaluating rules
+
+Input Field:
+Enter user attributes to evaluate against the combined rule as a JSON object.
+
+Example:
+
+json
+```
+{
+  "age": 35,
+  "department": "Sales",
+  "salary": 60000,
+  "experience": 4
+}
+```
