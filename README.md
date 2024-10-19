@@ -1,5 +1,25 @@
-# 3-tier-rule-engine
-a simple 3-tier rule engine application(Simple UI, API and Backend, Data) to determine user eligibility based on attributes like age, department, income, spend
+# Overview
+
+- In this assignment, I designed and implemented a rule engine API that allows users to create, modify, combine, and evaluate rules based on user attributes. The core functionality includes:
+
+    - Creating Rules: Users can define rules in a specific format, which are then parsed and stored in a database.
+    - Modifying Rules: Users can update existing rules by providing new conditions, enhancing flexibility.
+    - Combining Rules: Users can combine multiple rules into a single rule using logical operators.
+    - Evaluating Rules: The engine evaluates rules against user-provided data to determine eligibility or validity based on specified criteria.
+    - Error Handling and Validation: The API includes validation for rule syntax and attribute catalog, ensuring robust input handling.
+
+- Technology Choices
+Flask
+
+   - Simplicity and Flexibility: Flask is a micro web framework that allows for quick development and prototyping of APIs. Its lightweight    nature provides flexibility in structuring the application.
+
+MongoDB
+
+   - Schema Flexibility: MongoDB is a NoSQL database that allows for dynamic schema design. This is beneficial for the rule engine, where the structure of rules may evolve over time.
+   - Document-Based Storage: The document-oriented nature of MongoDB makes it easy to store complex data structures like rules and their AST representations in a natural format.
+   - JSON-like Structure: MongoDB’s BSON format is inherently compatible with the JSON format used in our API, simplifying data interchange between the application and the database.
+
+By combining Flask and MongoDB, the project leverages the strengths of both technologies to create a flexible, scalable, and easy-to-maintain rule engine API.
 
 
 # Project Structure
@@ -219,21 +239,6 @@ plaintext
 (experience > 10 OR income < 60000)
 ```
 
-5. rule5:
-This rule applies to users in the IT department with more than 3 years of experience or a minimum spend of 5000.
-
-plaintext
-```
-(department = 'IT' AND experience > 3) OR spend >= 5000
-```
-
-6. rule6:
-This rule checks if the user is either in the Operations department or has a salary higher than 80000.
-
-plaintext
-```
-(department = 'Operations' OR salary > 80000)
-```
 
 You can instruct users to enter these rules through the frontend's rule input field, and these samples demonstrate the flexibility of combining conditions using AND, OR, and comparison operators (>, <, >=, <=, etc.).
 
