@@ -23,7 +23,8 @@ rule-engine-app/
 │   ├── schema.py             # Database schema and connection
 │
 ├── tests/
-│   ├── test_rule_engine.py    # Unit tests for rule creation, combination, evaluation
+│   ├── test_rule_engine.py   # Unit tests for rule creation, combination, evaluation
+|   ├── __init__.py    
 │
 ├── frontend/
 │   ├── index.html            # Simple UI to create and evaluate rules
@@ -36,17 +37,6 @@ rule-engine-app/
 
 ```
 
-
-# Error Handling
-
-- Added checks if same rule is added twice or more - duplicates rules are created as- for rule1 it will be created as -> rule1_1 -> rule1_2
-
-- for tests use while in root directory and having activated the virtual enviroment 
-
-```
-python -m unittest tests/test_rule_engine.py
-
-```
 
 # Installation Steps
 
@@ -148,3 +138,17 @@ json
 }
 ```
 - There is also a frontend - to open cd frontend and run index.html
+
+
+# Error Handling
+
+- Added checks if same rule is added twice or more - duplicates rules are created as -
+  - for each rule with rule_id rule1
+  - duplicates will be created as -> rule1_1 -> rule1_2
+
+- for tests use while in root directory and having activated the virtual enviroment 
+
+```
+python -m unittest tests/test_rule_engine.py
+
+```
