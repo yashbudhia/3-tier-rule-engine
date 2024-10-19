@@ -111,9 +111,12 @@ json
     Description: Combines multiple rules into a single AST.
     Sample Request:
 
+
     bash
 
-curl -X POST http://127.0.0.1:5000/combine_rules -H "Content-Type: application/json" -d '{"rules": ["rule1", "rule2"]}'
+```
+curl -X POST http://127.0.0.1:5000/combine_rules -H "Content-Type: application/json" -d '{"rule_ids": ["rule1", "rule2"]}'
+```
 
 Sample Response:
 
