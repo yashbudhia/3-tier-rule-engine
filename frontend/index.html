@@ -113,11 +113,28 @@
         </div>
     </div>
 
-    <div>
-        <p>You can view the database for further exploring all created asts</p>
+    <!-- Form to modify a rule -->
+    <div class="container">
+        <div class="form-section">
+            <h2>Modify a Rule</h2>
+            <form id="modify-form">
+                <input type="text" id="modify-rule-id" placeholder="Enter rule ID (e.g., rule1)" required />
+                <input type="text" id="modify-rule-string" placeholder="New rule string" required />
+                <button type="submit">Modify Rule</button>
+            </form>
+            <p id="modify-message"></p>
+        </div>
+        <div class="sample-input">
+            <h2>Sample Input</h2>
+            <p><strong>Example:</strong></p>
+            <p>Rule ID: <strong>rule1</strong></p>
+            <p>New Rule String: <strong>age < 40 AND department = 'Sales'</strong></p>
+        </div>
     </div>
 
-  
+    <div>
+        <p>You can view the database for further exploring all created ASTs</p>
+    </div>
 
     <script src="script.js"></script>
 </body>

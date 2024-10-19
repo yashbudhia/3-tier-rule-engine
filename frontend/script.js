@@ -75,29 +75,24 @@ document.getElementById('evaluate-form').addEventListener('submit', async (e) =>
     }
 });
 
-// Handle fetching ASTs from the database
-document.getElementById('fetch-asts').addEventListener('click', async () => {
-    const response = await fetch(`${baseUrl}/fetch_asts`, {
-        method: 'GET',
+// Handle modifying a rule
+document.getElementById('modify-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const ruleId = document.getElementById('modify-rule-id').value;
+    const newRuleString = document.getElementById('modify-rule-string').value;
+
+    const response = await fetch(`${baseUrl}/modify_rule/${ruleId}`, {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ modifications: { rule_string: newRuleString } })
     });
 
     const result = await response.json();
-    const astsContainer = document.getElementById('stored-asts');
     if (!response.ok) {
-        astsContainer.innerText = `Error: ${result.error || 'Unknown error'}`;
+        document.getElementById('modify-message').innerText = `Error: ${result.error || 'Unknown error'}`;
     } else {
-        astsContainer.innerHTML = ''; // Clear previous ASTs
-        if (result.asts.length === 0) {
-            astsContainer.innerText = 'No ASTs found in the database.';
-        } else {
-            result.asts.forEach(ast => {
-                const astElement = document.createElement('pre');
-                astElement.innerText = `Rule ID: ${ast.rule_id}\nAST: ${JSON.stringify(ast.ast, null, 2)}`;
-                astsContainer.appendChild(astElement);
-            });
-        }
+        document.getElementById('modify-message').innerText = `Rule modified successfully.`;
     }
 });

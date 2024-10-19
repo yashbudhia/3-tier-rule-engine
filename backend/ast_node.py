@@ -25,3 +25,19 @@ class Node:
             left=Node.from_dict(data['left']),
             right=Node.from_dict(data['right'])
         )
+
+    def get_operands(self):
+        """Retrieve all operand nodes from the AST."""
+        operands = []
+
+        # If this node is an operand, add it to the list
+        if self.type == "operand":
+            operands.append(self)
+
+        # Traverse the left and right children, if they exist
+        if self.left:
+            operands.extend(self.left.get_operands())
+        if self.right:
+            operands.extend(self.right.get_operands())
+
+        return operands
