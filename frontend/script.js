@@ -66,12 +66,38 @@ document.getElementById('evaluate-form').addEventListener('submit', async (e) =>
         },
         body: JSON.stringify({ rule_id: ruleId, user_data: userData })
     });
-    
 
     const result = await response.json();
     if (!response.ok) {
         document.getElementById('evaluate-message').innerText = `Error: ${result.error || 'Unknown error'}`;
     } else {
         document.getElementById('evaluate-message').innerText = `Evaluation result: ${result.result}`;
+    }
+});
+
+// Handle fetching ASTs from the database
+document.getElementById('fetch-asts').addEventListener('click', async () => {
+    const response = await fetch(`${baseUrl}/fetch_asts`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const result = await response.json();
+    const astsContainer = document.getElementById('stored-asts');
+    if (!response.ok) {
+        astsContainer.innerText = `Error: ${result.error || 'Unknown error'}`;
+    } else {
+        astsContainer.innerHTML = ''; // Clear previous ASTs
+        if (result.asts.length === 0) {
+            astsContainer.innerText = 'No ASTs found in the database.';
+        } else {
+            result.asts.forEach(ast => {
+                const astElement = document.createElement('pre');
+                astElement.innerText = `Rule ID: ${ast.rule_id}\nAST: ${JSON.stringify(ast.ast, null, 2)}`;
+                astsContainer.appendChild(astElement);
+            });
+        }
     }
 });

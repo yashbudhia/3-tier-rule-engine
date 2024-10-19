@@ -5,35 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rule Engine</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2 {
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            width: 60%;
+        }
+
+        .sample-input {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-left: 20px;
+        }
+
+        .ast-display {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #eef;
+            white-space: pre-wrap; /* Preserve whitespace */
+        }
+
+        .ast-header {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h1>Rule Engine</h1>
 
     <!-- Form to create a rule -->
-    <h2>Create a Rule</h2>
-    <form id="rule-form">
-        <input type="text" id="rule-input" placeholder="Enter rule" required />
-        <button type="submit">Create Rule</button>
-    </form>
-    <div id="rule-message"></div>
-    <div id="ast-representation"></div>  <!-- Display AST here -->
-    
+    <div class="container">
+        <div class="form-section">
+            <h2>Create a Rule</h2>
+            <form id="rule-form">
+                <input type="text" id="rule-input" placeholder="Enter rule" required />
+                <button type="submit">Create Rule</button>
+            </form>
+            <div id="rule-message"></div>
+            <div class="ast-display">
+                <div class="ast-header">AST Representation:</div>
+                <div id="ast-representation"></div>  <!-- Display AST here -->
+            </div>
+        </div>
+        <div class="sample-input">
+            <h2>Sample Input</h2>
+            <p><strong>Example:</strong></p>
+            <p>rule1 = "age > 30 OR department = 'Sales'"</p>
+            <p>rule2 = "income < 50000 AND spend >= 1000"</p>
+        </div>
+    </div>
+
     <!-- Form to combine rules -->
-    <h2>Combine Rules</h2>
-    <form id="combine-form">
-        <input type="text" id="combine-input" placeholder="Enter rule IDs (e.g., rule1, rule2)">
-        <button type="submit">Combine Rules</button>
-    </form>
-    <p id="combine-message"></p>
+    <div class="container">
+        <div class="form-section">
+            <h2>Combine Rules</h2>
+            <form id="combine-form">
+                <input type="text" id="combine-input" placeholder="Enter rule IDs (e.g., rule1, rule2)">
+                <button type="submit">Combine Rules</button>
+            </form>
+            <p id="combine-message"></p>
+        </div>
+        <div class="sample-input">
+            <h2>Sample Input</h2>
+            <p><strong>Example:</strong></p>
+            <p>["rule1", "rule2"]</p>
+        </div>
+    </div>
 
     <!-- Form to evaluate a rule -->
-    <h2>Evaluate Rule</h2>
-    <form id="evaluate-form">
-        <input type="text" id="evaluate-rule-id" placeholder="Enter rule ID (e.g., rule1)">
-        <input type="text" id="evaluate-data" placeholder="Enter data (e.g., {&quot;age&quot;:35, &quot;salary&quot;:60000})">
-        <button type="submit">Evaluate Rule</button>
-    </form>
-    <p id="evaluate-message"></p>
+    <div class="container">
+        <div class="form-section">
+            <h2>Evaluate Rule</h2>
+            <form id="evaluate-form">
+                <input type="text" id="evaluate-rule-id" placeholder="Enter rule ID (e.g., rule1)">
+                <input type="text" id="evaluate-data" placeholder="Enter data (e.g., {&quot;age&quot;:35, &quot;salary&quot;:60000})">
+                <button type="submit">Evaluate Rule</button>
+            </form>
+            <p id="evaluate-message"></p>
+        </div>
+        <div class="sample-input">
+            <h2>Sample Input</h2>
+            <p><strong>Example:</strong></p>
+            <p>Rule ID: <strong>rule1</strong></p>
+            <p>Data: <strong>{ "age": 35, "department": "Sales" }</strong></p>
+        </div>
+    </div>
+
+    <div>
+        <p>You can view the database for further exploring all created asts</p>
+    </div>
+
+  
 
     <script src="script.js"></script>
 </body>

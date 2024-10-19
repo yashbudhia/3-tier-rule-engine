@@ -3,7 +3,7 @@ from flask_cors import CORS
 from backend.rule_parser import create_rule
 from backend.rule_evaluator import evaluate_rule
 from backend.rule_combiner import combine_rules
-from database.schema import save_rule, load_rule
+from database.schema import db,rules_collection,save_rule, load_rule
 from backend.ast_node import Node
 import time  # Import the time module
 
@@ -112,6 +112,9 @@ def evaluate_rule_endpoint():
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 400
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
