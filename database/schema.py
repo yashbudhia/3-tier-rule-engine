@@ -15,19 +15,32 @@ db = client['rule_engine']
 rules_collection = db['rules']
 
 def save_rule(rule_id, rule_string, ast):
-    # Check if the rule already exists
-    existing_rule = rules_collection.find_one({'_id': rule_id})
-    if existing_rule:
-        raise ValueError(f"Rule with ID '{rule_id}' already exists.")
+    base_id = rule_id  # Keep the original rule ID for appending suffixes
+    suffix_counter = 1
+    
+    while True:
+        try:
+            rule_data = {
+                "_id": rule_id,
+                "rule_string": rule_string,
+                "ast": ast,  # Ensure ast is a dictionary when passed in
+                "created_at": datetime.now(),
+                "modified_at": datetime.now()
+            }
 
-    rule_data = {
-        "_id": rule_id,
-        "rule_string": rule_string,
-        "ast": ast,  # ast should already be a dictionary when passed in
-        "created_at": datetime.now(),
-        "modified_at": datetime.now()
-    }
-    rules_collection.insert_one(rule_data)
+            rules_collection.insert_one(rule_data)
+            break  # If the insertion is successful, exit the loop
+
+        except Exception as e:
+            # Check for duplicate key error and update the rule_id
+            if "E11000" in str(e):
+                rule_id = f"{base_id}_{suffix_counter}"
+                suffix_counter += 1
+            else:
+                # If it's a different error, raise it
+                raise e
+
+
 
 def load_rule(rule_id):
     rule_data = rules_collection.find_one({'_id': rule_id})  # Adjust based on your MongoDB setup

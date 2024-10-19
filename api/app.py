@@ -1,19 +1,40 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 from backend.rule_parser import create_rule
 from backend.rule_evaluator import evaluate_rule
 from backend.rule_combiner import combine_rules
-from database.schema import save_rule, load_rule  # Adjusted import statement
-from backend.ast_node import Node  # Import the Node class
+from database.schema import save_rule, load_rule
+from backend.ast_node import Node
+import time  # Import the time module
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
-rules = {}  # In-memory storage for rules (optional, used in parallel with MongoDB)
+# In-memory cache of rules (optional, for quick access)
+rules_cache = {}
+rule_counter = 1  # Initialize a counter for rule IDs
+
+# Create Rule Endpoint
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from backend.rule_parser import create_rule
+from backend.rule_evaluator import evaluate_rule
+from backend.rule_combiner import combine_rules
+from database.schema import save_rule, load_rule
+from backend.ast_node import Node
+import time  # Import the time module
+import uuid  # Import uuid for unique ID generation
+
+app = Flask(__name__)
+CORS(app)
+
+# In-memory cache of rules (optional, for quick access)
+rules_cache = {}
 
 # Create Rule Endpoint
 @app.route("/create_rule", methods=["POST"])
 def create_rule_endpoint():
+    global rule_counter  # Declare as global to modify the counter
     try:
         rule_string = request.json.get("rule_string")
         if not rule_string:
@@ -22,48 +43,50 @@ def create_rule_endpoint():
         # Create AST from the rule string
         ast = create_rule(rule_string)
 
-        # Generate a unique rule ID
-        rule_id = f"rule{len(rules) + 1}"
+        # Generate a simple rule ID
+        rule_id = f"rule{rule_counter}"
+        rule_counter += 1  # Increment the counter for the next rule ID
 
-        # Save the rule to MongoDB, serializing the Node to a dictionary
-        save_rule(rule_id, rule_string, ast.to_dict())  # Convert to dict before saving
+        # Save the rule to MongoDB with unique rule_id logic
+        save_rule(rule_id, rule_string, ast.to_dict())
 
-        # Store the rule temporarily if needed
-        rules[rule_id] = ast
+        # Add to in-memory cache
+        rules_cache[rule_id] = ast
 
-        return jsonify({"rule_id": rule_id, "ast": ast.to_dict()})  # Return the AST representation as a dictionary
+        return jsonify({"rule_id": rule_id, "ast": ast.to_dict()}), 200
 
     except ValueError as ve:
-        return jsonify({"error": str(ve)}), 400  # Handle duplicate key error
+        return jsonify({"error": str(ve)}), 400
     except Exception as e:
-        print(f"Error occurred: {str(e)}")  # Log the error to the console
+        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 # Combine Rules Endpoint
 @app.route("/combine_rules", methods=["POST"])
 def combine_rules_endpoint():
     try:
-        rule_ids = request.json.get("rule_ids")  # Expecting a list of rule IDs
+        rule_ids = request.json.get("rule_ids")
         if not rule_ids:
             return jsonify({"error": "Rule IDs are required."}), 400
 
-        rules = []
+        rule_asts = []
         for rule_id in rule_ids:
-            rule = load_rule(rule_id)
-            if rule is None:
-                return jsonify({"error": f"Rule with ID {rule_id} not found."}), 404
-            rules.append(rule['ast'])  # Assuming `ast` is the correct field to use
+            rule_data = load_rule(rule_id)
+            if not rule_data:
+                return jsonify({"error": f"Rule with ID '{rule_id}' not found."}), 404
+            rule_asts.append(rule_data['ast'])
 
-        # Use the combine_rules function to combine the ASTs
-        combined_ast = combine_rules(rules, operator="AND")  # Or "OR" based on your requirement
+        # Combine the ASTs using AND (you can change the operator as needed)
+        combined_ast = combine_rules(rule_asts, operator="AND")
 
-        # Optionally, save the combined rule back to MongoDB or return the AST
-        combined_rule_id = f"combined_rule{len(rules) + 1}"  # Generate a new ID
+        # Save the combined rule to MongoDB
+        combined_rule_id = f"combined_rule{len(rules_cache) + 1}"
         save_rule(combined_rule_id, ' AND '.join(rule_ids), combined_ast.to_dict())
 
         return jsonify({"combined_rule_id": combined_rule_id, "ast": combined_ast.to_dict()}), 200
+
     except Exception as e:
-        print(f"Error occurred: {str(e)}")  # Log the error to the console
+        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 # Evaluate Rule Endpoint
@@ -76,18 +99,18 @@ def evaluate_rule_endpoint():
         if not rule_id or not user_data:
             return jsonify({"error": "Rule ID and user data are required"}), 400
 
-        # Retrieve the rule from the database using the rule_id
-        rule_data = load_rule(rule_id)  # Load rule directly from the database
-
+        # Load the rule from MongoDB
+        rule_data = load_rule(rule_id)
         if not rule_data:
-            return jsonify({"error": "Rule not found"}), 404
+            return jsonify({"error": f"Rule with ID '{rule_id}' not found."}), 404
 
-        # Evaluate the rule using the stored AST
-        result = evaluate_rule(rule_data['ast'], user_data)  # No need to convert since it's already a Node
+        # Evaluate the rule with the given user data
+        result = evaluate_rule(rule_data['ast'], user_data)
 
-        return jsonify({"result": result})
+        return jsonify({"result": result}), 200
+
     except Exception as e:
-        print(f"Error occurred: {str(e)}")  # Log the error to the console
+        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":

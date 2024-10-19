@@ -40,3 +40,10 @@ rule-engine-app/
 # Error Handling
 
 - Added checks if same rule is added twice or more
+
+- for tests use while in root directory and having activated the virtual enviroment 
+
+```
+python -m unittest tests/test_rule_engine.py
+
+```
