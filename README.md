@@ -137,10 +137,41 @@ json
   "result": true
 }
 ```
+
+4. Modify a Rule (Bonus) 
+2
+    Endpoint: PATCH /modify_rule/:ruleId
+    Sample Request:
+bash
+```
+curl -X PATCH http://127.0.0.1:5000/modify_rule/rule1 \
+-H "Content-Type: application/json" \
+-d '{
+    "modifications": {
+        "rule_string": "age < 40 AND department = '\''Sales'\''"
+    }
+}'
+```
+
+Sample Response
+
+json
+```
+{
+  "message": "Rule modified successfully."
+}
+```
+
+
+
 - There is also a frontend - to open cd frontend and run index.html
 
 
 # Error Handling
+
+- The API will return meaningful error messages in case of any issues, which can include invalid inputs, rule IDs that don’t exist, or server errors. (Bonus)
+
+- Implement validations for attributes to be part of a catalog. (Bonus)
 
 - Added checks if same rule is added twice or more - duplicates rules are created as -
   - for each rule with rule_id rule1
