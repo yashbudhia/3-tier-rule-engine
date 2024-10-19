@@ -8,7 +8,7 @@
     - Evaluating Rules: The engine evaluates rules against user-provided data to determine eligibility or validity based on specified criteria.
     - Error Handling and Validation: The API includes validation for rule syntax and attribute catalog, ensuring robust input handling.
 
-- Technology Choices
+Technology Choices :
 
 - Flask
 
