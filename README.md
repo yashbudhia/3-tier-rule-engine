@@ -80,16 +80,17 @@ in the terminal cd to api from the root directory and run the command
 flask run
 ```
 
-- API Endpoints
+- API Endpoints (Use Either Curl or Postman for api testing)
 
-    1. Create Rule:
+1. Create Rule:
         Endpoint: POST /create_rule
         Description: Creates a rule from the provided rule string and stores it in the database.
         Sample Request:
 
-        bash
-
+bash
+```
 curl -X POST http://127.0.0.1:5000/create_rule -H "Content-Type: application/json" -d '{"rule_string": "age > 30 AND income < 50000"}'
+```
 
 Sample Response:
 
@@ -112,7 +113,8 @@ json
     Sample Request:
 
 
-    bash
+
+bash
 
 ```
 curl -X POST http://127.0.0.1:5000/combine_rules -H "Content-Type: application/json" -d '{"rule_ids": ["rule1", "rule2"]}'
@@ -132,9 +134,10 @@ json
     Description: Evaluates a given rule’s AST against user attributes (JSON data).
     Sample Request:
 
-    bash
-
+bash
+```
 curl -X POST http://127.0.0.1:5000/evaluate_rule -H "Content-Type: application/json" -d '{"data": {"age": 35, "income": 40000}}'
+```
 
 Sample Response:
 
@@ -144,3 +147,4 @@ json
   "result": true
 }
 ```
+- There is also a frontend - to open cd frontend and run index.html
