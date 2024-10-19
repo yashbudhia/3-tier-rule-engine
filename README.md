@@ -9,11 +9,12 @@
     - Error Handling and Validation: The API includes validation for rule syntax and attribute catalog, ensuring robust input handling.
 
 - Technology Choices
-Flask
+
+- Flask
 
    - Simplicity and Flexibility: Flask is a micro web framework that allows for quick development and prototyping of APIs. Its lightweight    nature provides flexibility in structuring the application.
 
-MongoDB
+- MongoDB
 
    - Schema Flexibility: MongoDB is a NoSQL database that allows for dynamic schema design. This is beneficial for the rule engine, where the structure of rules may evolve over time.
    - Document-Based Storage: The document-oriented nature of MongoDB makes it easy to store complex data structures like rules and their AST representations in a natural format.
