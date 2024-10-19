@@ -36,7 +36,6 @@ def evaluate_operand(operand, data):
         raise ValueError(f"Invalid operator: {operator}")
 
 
-
 def evaluate_rule(ast, data):
     """Recursively evaluate an AST."""
     if ast is None:
@@ -53,5 +52,3 @@ def evaluate_rule(ast, data):
             return left_eval or right_eval
 
     return False
-
-

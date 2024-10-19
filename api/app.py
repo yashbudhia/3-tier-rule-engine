@@ -15,23 +15,6 @@ rules_cache = {}
 rule_counter = 1  # Initialize a counter for rule IDs
 
 # Create Rule Endpoint
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from backend.rule_parser import create_rule
-from backend.rule_evaluator import evaluate_rule
-from backend.rule_combiner import combine_rules
-from database.schema import save_rule, load_rule
-from backend.ast_node import Node
-import time  # Import the time module
-import uuid  # Import uuid for unique ID generation
-
-app = Flask(__name__)
-CORS(app)
-
-# In-memory cache of rules (optional, for quick access)
-rules_cache = {}
-
-# Create Rule Endpoint
 @app.route("/create_rule", methods=["POST"])
 def create_rule_endpoint():
     global rule_counter  # Declare as global to modify the counter
