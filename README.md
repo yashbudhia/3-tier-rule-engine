@@ -139,9 +139,11 @@ json
 ```
 
 4. Modify a Rule (Bonus) 
-2
+
     Endpoint: PATCH /modify_rule/:ruleId
     Sample Request:
+
+    
 bash
 ```
 curl -X PATCH http://127.0.0.1:5000/modify_rule/rule1 \
