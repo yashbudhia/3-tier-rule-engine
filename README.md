@@ -39,11 +39,105 @@ rule-engine-app/
 
 # Error Handling
 
-- Added checks if same rule is added twice or more
+- Added checks if same rule is added twice or more - duplicates rules are created as- for rule1 it will be created as -> rule1_1 -> rule1_2
 
 - for tests use while in root directory and having activated the virtual enviroment 
 
 ```
 python -m unittest tests/test_rule_engine.py
 
+```
+
+# Installation Steps
+
+- Clone the repository:
+
+- Create Virtual Environment:
+```
+python -m venv myenv
+source myenv/bin/activate  # For Linux/Mac
+myenv\Scripts\activate  # For Windows
+
+```
+- Install Dependencies:
+```
+pip install -r requirements.txt
+```
+
+- MongoDB Configuration:
+
+    Provide details about setting up MongoDB if not running locally.
+    Sample connection string in .env file:
+
+```
+DATABASE_URI=mongodb://localhost:27017
+
+```
+
+- Run the Flask server:
+in the terminal cd to api from the root directory and run the command
+```
+flask run
+```
+
+- API Endpoints
+
+    1. Create Rule:
+        Endpoint: POST /create_rule
+        Description: Creates a rule from the provided rule string and stores it in the database.
+        Sample Request:
+
+        bash
+
+curl -X POST http://127.0.0.1:5000/create_rule -H "Content-Type: application/json" -d '{"rule_string": "age > 30 AND income < 50000"}'
+
+Sample Response:
+
+json
+
+```
+
+    {
+      "rule_id": "rule1",
+      "AST": {...}
+    }
+
+
+```
+
+2. Combine Rules:
+
+    Endpoint: POST /combine_rules
+    Description: Combines multiple rules into a single AST.
+    Sample Request:
+
+    bash
+
+curl -X POST http://127.0.0.1:5000/combine_rules -H "Content-Type: application/json" -d '{"rules": ["rule1", "rule2"]}'
+
+Sample Response:
+
+json
+```
+    {
+      "combined_AST": {...}
+    }
+```
+3. Evaluate Rule:
+
+    Endpoint: POST /evaluate_rule
+    Description: Evaluates a given rule’s AST against user attributes (JSON data).
+    Sample Request:
+
+    bash
+
+curl -X POST http://127.0.0.1:5000/evaluate_rule -H "Content-Type: application/json" -d '{"data": {"age": 35, "income": 40000}}'
+
+Sample Response:
+
+json
+```
+{
+  "result": true
+}
 ```
