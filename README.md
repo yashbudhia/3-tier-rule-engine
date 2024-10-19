@@ -73,9 +73,9 @@ flask run
 - API Endpoints (Use Either Curl or Postman for api testing)
 
 1. Create Rule:
-        Endpoint: POST /create_rule
-        Description: Creates a rule from the provided rule string and stores it in the database.
-        Sample Request:
+    - Endpoint: POST /create_rule
+    - Description: Creates a rule from the provided rule string and stores it in the database.
+    - Sample Request:
 
 bash
 ```
@@ -98,9 +98,9 @@ json
 
 2. Combine Rules:
 
-    Endpoint: POST /combine_rules
-    Description: Combines multiple rules into a single AST.
-    Sample Request:
+    - Endpoint: POST /combine_rules
+    - Description: Combines multiple rules into a single AST.
+    - Sample Request:
 
 
 
@@ -120,9 +120,9 @@ json
 ```
 3. Evaluate Rule:
 
-    Endpoint: POST /evaluate_rule
-    Description: Evaluates a given rule’s AST against user attributes (JSON data).
-    Sample Request:
+    - Endpoint: POST /evaluate_rule
+    - Description: Evaluates a given rule’s AST against user attributes (JSON data).
+    - Sample Request:
 
 bash
 ```
@@ -140,10 +140,10 @@ json
 
 4. Modify a Rule (Bonus) 
 
-    Endpoint: PATCH /modify_rule/:ruleId
-    Sample Request:
+    - Endpoint: PATCH /modify_rule/:ruleId
+    - Sample Request:
 
-    
+
 bash
 ```
 curl -X PATCH http://127.0.0.1:5000/modify_rule/rule1 \
